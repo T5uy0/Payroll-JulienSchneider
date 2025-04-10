@@ -3,21 +3,47 @@
 skinparam classAttributeIconSize 0
 
 'packages
-package "Controllers"
+package "API"
 {
-    class EmployeeController{}
-    class EmployeeNotFoundAdvice{}
-    class EmployeeNotFoundException{}
-}
+    package "Controllers"
+    {
+        class EmployeeController{
+            - repository : EmployeeRepository 
+            {method} + all() : Employee
+            {method} + newEmployee(newEmployee : Employee) : void
+            {method} + one(id :long) : Employee
+            {method} + replaceEmployee(newEmployee : Employee, id :long) Employee
+            {method} + deleteEmployee(id :long) : void
+        }
 
-package "Entities"
+        class EmployeeNotFoundAdvice{
+        {method} + employeeNotFoundHandler(ex : EmployeeNotFoundException) : string
+        }
+
+        class EmployeeNotFoundException{
+            {method} EmployeeNotFoundException(id :long) : void
+        }
+    }
+}
+package "Domain"
 {
-    class Employee{}
+    package "Entities"
+    {
+        class Employee{
+            - id : long
+            - name : string
+            - role : string
+
+            {method} + equals(o : Object) : boolean
+            {method} + hashCode() : int
+            {method} + toString() : string
+        }
+    }
 }
 
 package "Repositories"
 {
-    class EmployeeRepository{}
+    interface EmployeeRepository{}
 }
 
 'relations
