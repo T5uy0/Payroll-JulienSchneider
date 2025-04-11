@@ -16,14 +16,24 @@ package "API"
             + deleteEmployee(id :long) : void
         }
 
-        class DepartementController{
-            - repository : DepartementRepository 
+        class DepartmentController{
+            - repository : DepartmentRepository 
+
+            + newDepartment(newDepartment : Department) : void
+            + one(id :long) : Department
+            + replaceDepartment(newDepartment : Department, id :long) Department
+            + deleteDepartment(id :long) : void
+
             + addEmployee(employee : Employee) : void
             + fireEmployee(employee : Employee) : void
         }
 
-        class DepartementNotFoundAdvice{
-            + DepartementNotFoundAdvice(id :long) : void
+        class DepartmentNotFoundAdvice{
+            + DepartmentNotFoundHandler(ex : DepartmentNotFoundException) : string
+        }
+
+        class DepartmentNotFoundException{
+            + DepartmentNotFoundException(id :long) : void
         }
 
         class EmployeeNotAvailableException{
@@ -54,12 +64,12 @@ package "Domain"
             + toString() : string
         }
 
-        class Departement {
+        class Department {
             ' - id : long
             - name : string
             
-            + Departement()
-            + Departement(employee : Employee)
+            + Department()
+            + Department(employee : Employee)
             + availibleEmployee(employee : Employee)
         }
     }
@@ -68,7 +78,7 @@ package "Domain"
 package "Repositories"
 {
     interface EmployeeRepository{}
-    interface DepartementRepository{}
+    interface DepartmentRepository{}
 }
 
 'relations
@@ -78,11 +88,12 @@ EmployeeController --> EmployeeRepository
 EmployeeController ..> EmployeeNotFoundException : throws
 EmployeeNotFoundAdvice --> EmployeeNotFoundException
 
-DepartementController --> Employee
-DepartementController --> Departement
-DepartementController --> DepartementRepository
+DepartmentController --> Employee
+DepartmentController --> department
+DepartmentController --> departmentRepository
 
-DepartementController ..> DepartementNotFoundAdvice : throws
-DepartementController ..> EmployeeNotAvailableException : throws
+DepartmentController ..> DepartmentNotFoundAdvice : throws
+DepartmentController ..> EmployeeNotAvailableException : throws
+DepartmentNotFoundAdvice --> DepartmentNotFoundException
 
 @enduml
