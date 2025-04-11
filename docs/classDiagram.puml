@@ -9,19 +9,33 @@ package "API"
     {
         class EmployeeController{
             - repository : EmployeeRepository 
-            {method} + all() : Employee
-            {method} + newEmployee(newEmployee : Employee) : void
-            {method} + one(id :long) : Employee
-            {method} + replaceEmployee(newEmployee : Employee, id :long) Employee
-            {method} + deleteEmployee(id :long) : void
+            + all() : Employee
+            + newEmployee(newEmployee : Employee) : void
+            + one(id :long) : Employee
+            + replaceEmployee(newEmployee : Employee, id :long) Employee
+            + deleteEmployee(id :long) : void
+        }
+
+        class DepartementController{
+            - repository : DepartementRepository 
+            + addEmployee(employee : Employee) : void
+            + fireEmployee(employee : Employee) : void
+        }
+
+        class DepartementNotFoundAdvice{
+            + DepartementNotFoundAdvice(id :long) : void
+        }
+
+        class EmployeeNotAvailableException{
+            + EmployeeNotAvailableException(id :long) : void
         }
 
         class EmployeeNotFoundAdvice{
-        {method} + employeeNotFoundHandler(ex : EmployeeNotFoundException) : string
+            + employeeNotFoundHandler(ex : EmployeeNotFoundException) : string
         }
 
         class EmployeeNotFoundException{
-            {method} EmployeeNotFoundException(id :long) : void
+            + EmployeeNotFoundException(id :long) : void
         }
     }
 }
@@ -32,11 +46,21 @@ package "Domain"
         class Employee{
             - id : long
             - name : string
+            - email : string
             - role : string
 
-            {method} + equals(o : Object) : boolean
-            {method} + hashCode() : int
-            {method} + toString() : string
+            + equals(o : Object) : boolean
+            + hashCode() : int
+            + toString() : string
+        }
+
+        class Departement {
+            ' - id : long
+            - name : string
+            
+            + Departement()
+            + Departement(employee : Employee)
+            + availibleEmployee(employee : Employee)
         }
     }
 }
@@ -44,6 +68,7 @@ package "Domain"
 package "Repositories"
 {
     interface EmployeeRepository{}
+    interface DepartementRepository{}
 }
 
 'relations
@@ -52,4 +77,12 @@ EmployeeController --> EmployeeRepository
 
 EmployeeController ..> EmployeeNotFoundException : throws
 EmployeeNotFoundAdvice --> EmployeeNotFoundException
+
+DepartementController --> Employee
+DepartementController --> Departement
+DepartementController --> DepartementRepository
+
+DepartementController ..> DepartementNotFoundAdvice : throws
+DepartementController ..> EmployeeNotAvailableException : throws
+
 @enduml
