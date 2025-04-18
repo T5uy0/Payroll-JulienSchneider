@@ -70,7 +70,8 @@ package "Domain"
             
             + Department()
             + Department(employee : Employee)
-            + availibleEmployee(employee : Employee)
+            + availableEmployee(employee : Employee)
+            + toString() : string
         }
     }
 }
